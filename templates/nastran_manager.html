@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Nastran </h1>
+    <ul class="list-group"> Running
+        {% for case in nastran_cases %}
+        <div class="row">
+            <div class="col-12 col-sm-6 col-lg-8">{{case.name}}</div>
+            <div class="col-6 col-lg-4">{{case.date}}</div>
+        </div>
+
+        {% endfor %}
+    </ul>
+
+    <ul class="list-group"> Queue
+        {% for case in nastran_cases %}
+            <li class="list-group-item">{{case.name}} - {{case.date}}</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-group"> Recently ended
+        {% for case in nastran_cases %}
+            <li class="list-group-item">{{case.name}} - {{case.date}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
