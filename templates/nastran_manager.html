@@ -1,26 +1,45 @@
 {% extends 'layout.html' %}
-
 {% block body %}
     <h1>Nastran </h1>
-    <ul class="list-group"> Running
+    <div class="t-grid"> 
+        <div class="t-grid-row">
+            <div class="t-grid-cell t-content"><h4>Case</h4></div>
+            <div class="t-grid-cell t-content"><h4>Date</h4></div>
+            <div class="t-grid-cell t-content"><h4>User</h4></div>
+            <div class="t-grid-cell t-content"><h4>Status</h4></div>
+
+        </div>
         {% for case in nastran_cases %}
-        <div class="row">
-            <div class="col-12 col-sm-6 col-lg-8">{{case.name}}</div>
-            <div class="col-6 col-lg-4">{{case.date}}</div>
+        <div class="t-grid-row">
+            <div class="t-grid-cell t-content t-first"><p>{{case.name}}</p></div>
+            <div class="t-grid-cell t-content t-second"><p>{{case.date}}</p></div>
+            <div class="t-grid-cell t-content t-third"><p>{{case.user}}</p></div>
+            <div class="t-grid-cell t-content-img">
+                {% if case.state == 'Running' %}
+                    <div class="media">
+                        <img class="img-responsive" src="{{ url_for('static', filename ='running_robot.gif')}}" >
+                    </div>
+                {% elif case.state == 'Waiting' %}
+                    <div class="media">
+                        <img class="img-responsive" src="{{ url_for('static', filename ='sleeping.gif')}}" >
+                    </div>
+                {% elif case.state == 'Success' %}
+                    <div class="media">
+                        <img class="img-responsive" src="{{ url_for('static', filename ='carnaval.gif')}}" >
+                    </div>
+                {% else %}
+                    <div class="media">
+                        <img class="img-responsive" src="{{ url_for('static', filename ='fire.gif')}}" >
+                    </div>                
+                {% endif %}       
+            </div>
         </div>
 
         {% endfor %}
-    </ul>
+    </div>
 
-    <ul class="list-group"> Queue
-        {% for case in nastran_cases %}
-            <li class="list-group-item">{{case.name}} - {{case.date}}</li>
-        {% endfor %}
-    </ul>
+    {% if 'logged_in' in session %}
+        <a href="/register" class="btn btn-primary btn-lg">Load Case</a>
+    {% endif %}
 
-    <ul class="list-group"> Recently ended
-        {% for case in nastran_cases %}
-            <li class="list-group-item">{{case.name}} - {{case.date}}</li>
-        {% endfor %}
-    </ul>
 {% endblock %}

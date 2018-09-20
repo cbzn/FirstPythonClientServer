@@ -1,10 +1,11 @@
 from flask import Flask, request, render_template, flash, redirect, url_for, session
-from data import Articles
+
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 #from flaskext.mysql import MySQL
 
 def start():
+
     app = Flask(__name__)
     #app.debug = True
 
@@ -29,23 +30,33 @@ def start():
     except:pass
     
 
-
-
     Nastran_cases = [
         {'id': 1,
         'name': 'Article 1',
-        'body': 'text1 text text text',
-        'date': '17September2018'},
+        'user': 'text1 text text text',
+        'date': '17September2018',
+        'state': 'Running'},
         {'id': 2,
         'name': 'Article 2',
-        'body': 'text2 text text text',
-        'date': '17September2018'},
-        {'id': 3,
-        'name': 'Article 3',
-        'body': 'text3 text text text',
-        'date': '17September2018'}                
+        'user': 'text2 text text text',
+        'date': '17September2018',
+        'state': 'Waiting'},     
+        {'id': 2,
+        'name': 'Article 2',
+        'user': 'text2 text text text',
+        'date': '17September2018',
+        'state': 'Waiting'},   
+        {'id': 2,
+        'name': 'Article 2',
+        'user': 'text2 text text text',
+        'date': '17September2018',
+        'state': 'Failed'},            
+        {'id': 2,
+        'name': 'Article 2',
+        'user': 'text2 text text text',
+        'date': '17September2018',
+        'state': 'Success'},                            
     ]
-
 
     class RegisterForm(Form):
         name = StringField('Name', [validators.DataRequired()])
@@ -56,28 +67,31 @@ def start():
             ])
         confirm = PasswordField('Confirm Password')
 
-
-    @app.route('/nastran_manager')
+    # ROUTING
+    @app.route('/nastran_manager') # Decorator. Links a pythonfunction to a route 
     def nastran():
-        return render_template( 'nastran_manager.html', nastran_cases = Nastran_cases)    
+        return render_template( 'nastran_manager.html', nastran_cases = Nastran_cases, session=session)    
 
-
-    @app.route('/')
-    def index():
+    @app.route('/') #Root directory
+    @app.route('/home')
+    @app.route('/<word>')
+    def index(word = None):
+        if word:
+            flash('Wrong URL!', 'danger')
         return render_template('home.html')
 
     @app.route('/about')
     def about():
         return render_template('about.html')
 
-    @app.route('/article/<string:id>/')
+    @app.route('/article/<string:id>/') #id is the name (expected string) of the variable that will enter the function below
     def article(id): 
         return render_template('article.html', id = id) 
 
-    @app.route('/login', methods=['GET', 'POST'])
+    # The second parameter establishes that this url is able to handle GET and POST methods
+    @app.route('/login', methods=['GET', 'POST']) 
     def login():
-        if request.method == 'POST':
-            #Get form fields
+        if request.method == 'POST': #Get FORM fields
             email = request.form["email"]
             password_candidate = request.form["password"]
 
@@ -160,7 +174,9 @@ def start():
             return redirect(url_for('login'))
     return app
 
+#To run this file when we run it directly, not when we import this file
 if __name__ == '__main__':
     app = start()
     app.secret_key = 'secret123'
+
     app.run(debug = True)

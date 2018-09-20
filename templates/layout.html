@@ -1,14 +1,21 @@
 <!DOCTYPE html>
+<!--Variable is placed as: {{ myvariable}} in the html
+This variable is contained in the input function that 
+invoques this template:
+render_template('dashboard.html', myvariable=extvar1)
+--> 
+
+
 <html>
   <head>
     <meta charset="utf-8">
     <title>GANA2.0 Manager</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link type="text/css" href="./grid.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename ='css_used.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename ='grid.css')}}" />
   </head>
 
   <body>
-    {% include 'includes/_navbar.html' %}
+    {% include 'includes/_navbar.html' %} 
 
     <div class="container">
       {% include "includes/_messages.html"%}
